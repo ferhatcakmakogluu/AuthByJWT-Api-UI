@@ -1,0 +1,6 @@
+@AuthByJWT.Api_HostAddress = http://localhost:5212
+
+GET {{AuthByJWT.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
