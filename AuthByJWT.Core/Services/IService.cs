@@ -8,8 +8,8 @@ namespace AuthByJWT.Core.Services
 {
     public interface IService<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<IEnumerable<T>> GetById(string id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(string id);
         Task AddAsync(T entity);
         Task Update(T entity);
         Task Delete(T entity);

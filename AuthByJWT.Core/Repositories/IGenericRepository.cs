@@ -8,9 +8,9 @@ namespace AuthByJWT.Core.Repositories
 {
     public interface IGenericRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetById(string id);
-        void Add(T entity);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync(string id);
+        void AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
     }
