@@ -3,14 +3,36 @@ using AuthByJWT.Core.Entities;
 using AuthByJWT.Repository;
 using AuthByJWT.Service.Mapping;
 using AuthByJWT.Service.Services;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using AuthByJWT.Api.AutofacModules;
+using AuthByJWT.Core.Repositories;
+using AuthByJWT.Core.Services;
+using AuthByJWT.Core.UnitOfWorks;
+using AuthByJWT.Repository.Repositories;
+using AuthByJWT.Repository.UnitOfWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.ConfigureContainer<ContainerBuilder>
+    (containerBuilder => containerBuilder.RegisterModule(new AutofacModule()));
+
+/*
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+*/
 
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -62,6 +84,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+
 
 var app = builder.Build();
 

@@ -9,6 +9,7 @@ using AuthByJWT.Service.Services;
 using Autofac;
 using System.Reflection;
 using Module = Autofac.Module;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuthByJWT.Api.AutofacModules
 {
@@ -19,6 +20,8 @@ namespace AuthByJWT.Api.AutofacModules
             //sadece bir tane olan Generic olanları manuel tek tek ekledik
             builder.RegisterGeneric(typeof(GenericRepository<>)).As(typeof(IGenericRepository<>)).InstancePerLifetimeScope();
             builder.RegisterGeneric(typeof(Service<>)).As(typeof(IService<>)).InstancePerLifetimeScope();
+
+            builder.RegisterType<AppDbContext>().As<DbContext>().InstancePerLifetimeScope();
 
             //Sdece bir tane olan ama generic olmayanı manuel ekledik
             builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();

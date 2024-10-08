@@ -15,7 +15,7 @@ namespace AuthByJWT.Repository.Repositories
         private readonly DbContext _dbContext;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(DbContext dbContext)
+        public GenericRepository(AppDbContext dbContext)
         {
             _dbContext = dbContext;
             _dbSet = dbContext.Set<T>();
