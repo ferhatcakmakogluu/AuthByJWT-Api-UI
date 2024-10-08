@@ -4,6 +4,7 @@ using AuthByJWT.Core.UnitOfWorks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -47,6 +48,11 @@ namespace AuthByJWT.Service.Services
         {
             _genericRepository.Update(entity);
             await _unitOfWork.CommitAsync();
+        }
+
+        public IQueryable<T> Where(Expression<Func<T, bool>> expression)
+        {
+            return _genericRepository.Where(expression);
         }
     }
 }
