@@ -20,7 +20,7 @@ namespace AuthByJWT.Repository.Repositories
             _dbSet = dbContext.Set<T>();
         }
 
-        public async void AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
         }

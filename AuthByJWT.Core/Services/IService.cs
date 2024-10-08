@@ -10,7 +10,7 @@ namespace AuthByJWT.Core.Services
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync(string id);
-        Task AddAsync(T entity);
+        Task<T> AddAsync(T entity);
         Task Update(T entity);
         Task Delete(T entity);
     }

@@ -1,10 +1,14 @@
 using AuthByJWT.Repository;
+using AuthByJWT.Service.Mapping;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
+builder.Services.AddAutoMapper(typeof(MapProfile));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
