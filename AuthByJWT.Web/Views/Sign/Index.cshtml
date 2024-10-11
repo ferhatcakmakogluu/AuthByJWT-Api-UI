@@ -1,0 +1,52 @@
+﻿@model LoginDto
+@{
+}
+<head>
+    <link rel="stylesheet" href="~/css/login-page.css" asp-append-version="true" />
+</head>
+<div class="nav">
+    <button id="menuToggle"><i class='bx bx-menu'></i></button>
+</div>
+<main role="main" class="pb-3">
+    <div class="login-page">
+
+        <div class="container">
+            <h1>Hesabına Giriş Yap 👏</h1>
+            <div class="social-login">
+                <button class="google">
+                    <i class='bx bxl-google'></i>
+                    Google ile Giriş
+                </button>
+                <button class="google">
+                    <i class='bx bxl-apple'></i>
+                    Apple ile Giriş
+                </button>
+            </div>
+            <div class="divider">
+                <div class="line"></div>
+                <p>Veya</p>
+                <div class="line"></div>
+            </div>
+
+            <form asp-controller="Sign" asp-action="Index" method="post">
+                <label for="Email">Email:</label>
+                <div class="custome-input">
+                    <input asp-for="Email" type="email" name="Email" placeholder="Mail Adresiniz" autocomplete="off">
+                    <i class='bx bx-at'></i>
+                </div>
+                <label for="Password">Şifre:</label>
+                <div class="custome-input">
+                    <input asp-for="Password" type="password" name="Password" placeholder="Şifreniz">
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+                <!--<span class="danger-span-alert">@ViewBag.LoginErrorMessage</span>-->
+                <button type="submit" class="login">Giriş Yap</button>
+                <div class="links">
+                    <a href="#">Şifremi Sıfırla</a>
+                    <!--<a asp-controller="Login" asp-action="Register">Bir Hesabınız yok mu?</a>-->
+                </div>
+            </form>
+
+        </div>
+    </div>
+</main>

@@ -15,6 +15,7 @@ using AuthByJWT.Core.Services;
 using AuthByJWT.Core.UnitOfWorks;
 using AuthByJWT.Repository.Repositories;
 using AuthByJWT.Repository.UnitOfWorks;
+using AuthByJWT.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +25,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>
     (containerBuilder => containerBuilder.RegisterModule(new AutofacModule()));
-
-/*
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped(typeof(IService<>), typeof(Service<>));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-*/
 
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
@@ -98,6 +90,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCustomException();
 
 app.UseAuthentication();
 app.UseAuthorization();

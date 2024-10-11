@@ -36,5 +36,6 @@ namespace AuthByJWT.Core.DTOs.CustomResponseDto
             var errorDto = new ErrorDto(error);
             return new CustomResponse<T> { Error = errorDto, StatusCode = statusCode, IsSuccessfull = false };
         }
+
     }
 }
