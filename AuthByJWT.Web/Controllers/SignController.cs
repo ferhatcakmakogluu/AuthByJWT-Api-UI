@@ -25,13 +25,7 @@ namespace AuthByJWT.Web.Controllers
             var response = await _authenticationApiService.CreateToken(loginDto);
             if (response != null)
             {
-                var accessToken = response.AccessToken.ToString();
-                var cookieOptions = new CookieOptions
-                {
-                    // Tarayıcı tarafından okunabilir
-                    HttpOnly = true
-                };
-                Response.Cookies.Append("token", accessToken);
+                HttpContext.Session.SetString("token", response.AccessToken.ToString());
                 return RedirectToAction("Index", "Home");
             }
 

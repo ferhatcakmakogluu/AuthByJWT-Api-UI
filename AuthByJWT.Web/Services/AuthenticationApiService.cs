@@ -1,24 +1,25 @@
-﻿using AuthByJWT.Core.DTOs;
+﻿using AuthByJWT.Api;
+using AuthByJWT.Core.DTOs;
 using AuthByJWT.Core.DTOs.CustomResponseDto;
 using AuthByJWT.Core.DTOs.CustomResponses;
 using AuthByJWT.Core.DTOs.jwtDTOs;
-using Azure;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Security.Claims;
+using System.Net.Http.Headers;
 
 namespace AuthByJWT.Web.Services
 {
     public class AuthenticationApiService
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         //private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthenticationApiService(HttpClient httpClient)
+        public AuthenticationApiService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<TokenDto> CreateToken(LoginDto login)
@@ -35,6 +36,33 @@ namespace AuthByJWT.Web.Services
             //_httpContextAccessor.HttpContext.Session.SetString("token", accessToken);
 
             return responseBody.Data;
+        }
+
+        public async Task<List<WeatherForecast>> Weather()
+        {
+            var response = await  _httpClient.GetFromJsonAsync<List<WeatherForecast>>("WeatherForecast");
+            return response;
+        }
+
+        public async Task<CustomData> GetData()
+        {
+            var token = _httpContextAccessor.HttpContext.Session.GetString("token");
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("Kullanıcı oturum açmamış veya token geçerli değil.");
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await _httpClient.GetFromJsonAsync<CustomData>("User/Data");
+
+            if (response == null)
+            {
+                throw new HttpRequestException("Veri alınamadı. API'den geçerli bir cevap dönmedi.");
+            }
+
+            return response;
         }
     }
 }

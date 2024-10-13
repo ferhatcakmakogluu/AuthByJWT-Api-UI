@@ -12,23 +12,34 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using AuthByJWT.Service.Services;
 using AuthByJWT.Web.Middlewares;
+using AuthByJWT.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.Configure<CustomTokenOptionsDto>(builder.Configuration.GetSection("TokenOption"));
+
+/*builder.Services.Configure<CustomTokenOptionsDto>(builder.Configuration.GetSection("TokenOption"));
 var tokenOptions = builder.Configuration.GetSection("TokenOption").Get<CustomTokenOptionsDto>();
 
-builder.Services.AddCustomTokenAuth(tokenOptions);
+builder.Services.AddCustomTokenAuth(tokenOptions);*/
 
 //autofac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>
     (containerBuilder => containerBuilder.RegisterModule(new AutofacModule()));
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true; // Güvenlik amaçlý
+    options.Cookie.IsEssential = true; // GDPR uyumluluðu
+});
+builder.Services.AddHttpContextAccessor();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
 builder.Services.AddHttpClient();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -50,6 +61,7 @@ builder.Services.AddHttpClient<AuthenticationApiService>(opt =>
 var app = builder.Build();
 
 app.UseExceptionHandler("/Home/Error");
+
 if (!app.Environment.IsDevelopment())
 {
     
@@ -60,8 +72,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
+
 app.UseRouting();
 
+//app.UseCustomException();
 app.UseAuthentication();
 app.UseAuthorization();
 

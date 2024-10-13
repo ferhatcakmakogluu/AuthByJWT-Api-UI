@@ -35,5 +35,13 @@ namespace AuthByJWT.Api.Controllers
         {
             return ActionResultInstance(await _userService.CreateUserRoles(userRoleDto.UserName,userRoleDto.Role));
         }
+
+        [Authorize]
+        [HttpGet("Data")]
+        public IActionResult Data()
+        {
+            CustomData customData = new CustomData {Id=1, Name = "Data" };
+            return Ok(customData);
+        }
     }
 }
